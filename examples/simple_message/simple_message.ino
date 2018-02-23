@@ -26,7 +26,7 @@ void setup() {
   // modem starts powered down to save power until it is needed so needs to be reset/turned on before use.  
   // The if else clause can be used to check the success of the reset as reset returns true for success and false for fail
   
-  if (sigfox.reset()){
+  if (sigfox.wakeup()){
     Serial.print("Reset     : ");Serial.println("success");
   }
   else{
@@ -41,7 +41,7 @@ void setup() {
   Serial.print  ("Device Id : ");Serial.println(sigfox.getDeviceId(2000));
 
   // string we are going to send, hex chars only allowed must be even number no "half" bytes allowed
-  String hexString = "F00DDEADBEEFC0FFEE";
+  String hexString = "140028001402280200000402";
 
   // function to send hex string no return value as device is sent to sleep and left to transmit on its own
   sigfox.sendHexString(hexString);

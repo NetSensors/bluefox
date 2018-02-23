@@ -26,7 +26,7 @@ void setup() {
   // modem starts powered down to save power until it is needed so needs to be reset/turned on before use.  
   // The if else clause can be used to check the success of the reset as reset returns true for success and false for fail
   
-  if (sigfox.reset()){
+  if (sigfox.wakeup()){
     Serial.print("Reset     : ");Serial.println("success");
   }
   else{
