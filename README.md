@@ -2,10 +2,10 @@
 
 - Install Arduino ESP32 support on Windows, instructions here https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/windows.md
 
-- Next we Install the bluefox libraries setup the development enviornment and load our first sketch.
+Next we Install the bluefox libraries, setup the development enviornment and load our first sketch.
 
 1. Navigate to https://github.com/NetSensors/bluefox 
-2. Click on the green clone or download button
+2. Click on the green clone or download button.
 3. Click on the blue download ZIP bitton and choose a location to save the zip file in. We will need this file in the next step.
 
 ![Screenshot](screenshots/bf001.png)
@@ -16,11 +16,11 @@ Click on Sketch -> Include Library -> Add ZIP library
 
 ![Screenshot](screenshots/bf002.png)
 
-1. Browse to and select the zip file we downloaded in the previous step
+1. Browse to and select the zip file we downloaded in the previous step.
 
 ![Screenshot](screenshots/bf003.png)
 
-Click on Edit -> Examples -> Bluefox -> simple_message this opens an example sketch
+Click on Edit -> Examples -> Bluefox -> simple_message this opens an example sketch.
 
 ![Screenshot](screenshots/bf004.png)
 
@@ -36,7 +36,7 @@ We now need to connect our development kit to the computer so we can download th
 
 ![Screenshot](screenshots/bf006.png)
 
-1. Press this arrow ICON to build and compile the simple message sketch  
+1. Press this arrow ICON to build and compile the simple message sketch.  
 2. Once complete you should see the last message in the window at the bottom being Hard Reseting... , There should be no error messages shown.
 
 ![Screenshot](screenshots/bf007.png)
