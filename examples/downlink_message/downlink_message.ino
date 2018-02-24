@@ -12,6 +12,9 @@
 #include "soc/rtc_cntl_reg.h"
 #include "Sigfox.h"
 
+#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+#define TIME_TO_SLEEP  86400       /* Time ESP32 will go to sleep (in seconds) */
+
 //create an instance of the Sigfox library/class
 Sigfox sigfox;
 
@@ -43,14 +46,16 @@ void setup() {
   // string we are going to send, hex chars only allowed must be even number no "half" bytes allowed
   String hexString = "F00DDEADBEEFC0FFEE";
 
-  // function to send hex string no return value as device is sent to sleep and left to transmit on its own
   Serial.print("Sending   : "); Serial.println(hexString);
 
-  Serial.print("Result    : ");Serial.println(sigfox.downlinkHexString(hexString));
   
-  // example commented out below where we can send a byte array instead of a string   
-  //byte message[] = {0x01, 0x69, 0x07, 0xB2, 0xA2, 0x4A, 0xBC, 0x16, 0xA2, 0xE5, 0xC0, 0x04};
-  //sigfox.sendByteArray(message);
+  // Sends the hex string then waits for downlink response either prints response or error message
+  // usually a timeout if no response recieved
+  Serial.print("Result    : ");Serial.println(sigfox.downlinkHexString(hexString));
+
+  sigfox.sleep(100);
+  // goes to sleep to save battery life, will tx once a day or when reset button pressed 
+  esp_deep_sleep_start();
 
 }
 

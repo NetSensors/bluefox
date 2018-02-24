@@ -50,8 +50,9 @@ Sigfox::Sigfox(){
 
 void Sigfox::begin(){
 		
+	Sensor.SetUpdateInterval(1000);	
 	Sensor.Begin();
-	Sensor.SetUpdateInterval(1000);
+	
 	resetModem();
 	SigfoxSerial.begin(9600, SERIAL_8N1, SIGFOX_RX_PIN, SIGFOX_TX_PIN);
 	// May be a better idea starting with the sigfox modem asleep to conserve power
