@@ -9,56 +9,67 @@
 
 #include "Arduino.h"
 #include "Sigfox.h"
+#include <SHT3x.h>
+
+#define  BATTERY_MONITOR_PIN A6
+#define  SIGFOX_TX_PIN 26
+#define  SIGFOX_RX_PIN 25
+#define  SIGFOX_RESET_PIN 5
 
 HardwareSerial SigfoxSerial(1);
+
+SHT3x Sensor;
 
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
 
-int pin_tx = 14;
-int pin_rx = 13;
-int pin_reset = 27;
+const float measured = 3.54; 
+const float reported = 3.48;
 
 
 //boolean _newData = false;
 
 Sigfox::Sigfox(){
-	
+	
   
-  pinMode(pin_reset, OUTPUT);
+  pinMode(SIGFOX_RESET_PIN, OUTPUT);
+  analogSetPinAttenuation(A6, ADC_0db);
+  digitalWrite(SIGFOX_RESET_PIN, HIGH); 
 
 
 }
 
 void Sigfox::begin(){
-	
-	SigfoxSerial.begin(9600, SERIAL_8N1, pin_rx, pin_tx);
-	
+		
+	Sensor.Begin();
+	resetModem();
+	SigfoxSerial.begin(9600, SERIAL_8N1, SIGFOX_RX_PIN, SIGFOX_TX_PIN);
 	// May be a better idea starting with the sigfox modem asleep to conserve power
-	sleep(1000);
-	//sigfoxReset();
+	sleep(100);
+	
+
 }
 
 bool Sigfox::sleep(long timeout){
 	
-    if (executeATcommand("AT$P=1\r\n",timeout)) {
+	if (executeATcommand("AT$P=1\r\n",timeout)) {
 		
 		if (recievedData == "OK"){
-                  printDebug("Sleeping",recievedData);
+                  //printDebug("Sleeping",recievedData);
 				  return true;
 		}
 	}
 	else {
-				  printDebug("Sleep","timeout");
+				  //printDebug("Sleep","timeout");
 				  return false;
 	}
 	
 }
 
-bool Sigfox::reset(){
+bool Sigfox::wakeup(){
 
    //need to add in return type showing success or failure
-   resetModem();
+   //resetModem();
    
     printDebug("Initialise the sigfox modem");
     if (executeATcommand("AT\n",200)){
@@ -92,10 +103,10 @@ bool Sigfox::reset(){
        printDebugValue("Timeout!");
 	   return false;
     }
+	
+	
 	return true;
 }
-
-
 
 String Sigfox::getPacCode(){
 	
@@ -184,9 +195,9 @@ String Sigfox::downlinkHexString(String message){
 }
 
 void Sigfox::resetModem(){
-    digitalWrite(pin_reset, LOW);
-    wait(60);
-    digitalWrite(pin_reset, HIGH); 
+    digitalWrite(SIGFOX_RESET_PIN, LOW);
+    wait(100);
+    digitalWrite(SIGFOX_RESET_PIN, HIGH); 
     //allows modem time to initialise minimum tested 50ms
     wait(60);
 }
@@ -305,6 +316,36 @@ void Sigfox::printDebugValue(String val){
       
   #endif 
   
+}
+
+float Sigfox::getTemperature(){
+	
+	Sensor.UpdateData();
+  
+	return (float)Sensor.GetTemperature();
+  
+  
+}
+
+float Sigfox::getRelHumidity(){
+	
+	Sensor.UpdateData();
+  
+	return (float)Sensor.GetRelHumidity();
+  
+  
+}
+
+float Sigfox::getBatteryVoltage() {
+
+  int aValue = analogRead(BATTERY_MONITOR_PIN);
+  float ref = ((1.1/4095.0000)*(aValue));
+  float correction = measured/reported;
+  ref = ref*correction;
+  float ratio = ((1000.00f+330.00f)/330.00f);
+  float bVoltage = ref*ratio;
+  return bVoltage;
+
 }
 
 
