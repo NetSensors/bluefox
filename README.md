@@ -26,7 +26,7 @@ Click on Edit -> Examples -> Bluefox -> simple_message this opens an example ske
 
 We now need to connect our development kit to the computer so we can download the sketch (firmware) to the development kit. The image below shows how this should be done. Ensure you get the USB to serial adapter the correct way round.
 
-![Screenshot](screenshots/bluefox-connect.png)
+![Screenshot](screenshots/bluefox-connect.jpg)
 
 
 ![Screenshot](screenshots/bf005.png)
