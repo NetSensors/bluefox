@@ -9,7 +9,7 @@
 
 #include "Arduino.h"
 #include "Sigfox.h"
-#include <SHT3x.h>
+#include "SHT3x.h"
 
 #define  BATTERY_MONITOR_PIN A6
 #define  SIGFOX_TX_PIN 26
@@ -18,7 +18,16 @@
 
 HardwareSerial SigfoxSerial(1);
 
-SHT3x Sensor;
+
+SHT3x Sensor( 0x44,         //Set the address
+                SHT3x::Zero,  //Functions will return zeros in case of error
+                255,          //If you DID NOT connected RESET pin
+                SHT3x::SHT30, //Sensor type
+                SHT3x::Single_HighRep_ClockStretch //Low repetability mode
+                );
+
+
+
 
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
@@ -42,6 +51,7 @@ Sigfox::Sigfox(){
 void Sigfox::begin(){
 		
 	Sensor.Begin();
+	Sensor.SetUpdateInterval(1000);
 	resetModem();
 	SigfoxSerial.begin(9600, SERIAL_8N1, SIGFOX_RX_PIN, SIGFOX_TX_PIN);
 	// May be a better idea starting with the sigfox modem asleep to conserve power

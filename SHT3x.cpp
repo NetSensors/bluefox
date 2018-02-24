@@ -12,7 +12,7 @@
 
 void	SHT3x::Begin()
 {
-	Wire.begin(22,21);
+	Wire.begin(21,22);
 	_OperationEnabled = true;
 }
 
