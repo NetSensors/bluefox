@@ -28,21 +28,23 @@ We now need to connect our development kit to the computer so we can download th
 
 ![Screenshot](screenshots/bluefox-connect.jpg)
 
+1. Select Tools -> Board -> ESP32 Dev Module this selects the correct board for the Bluefox develpopment kit.
 
 ![Screenshot](screenshots/bf005.png)
 
-
+1. Select Tools -> Port -> COMXX the port number will the com port your USB atapter is connected to. 
 
 ![Screenshot](screenshots/bf006.png)
 
-
+1. Press this arrow ICON to build and compile the simple message sketch  
+2. Once complete you should see the last message in the window at the bottom being Hard Reseting... , There should be no error messages shown.
 
 ![Screenshot](screenshots/bf007.png)
 
-
+1. Select Tools -> Serial Monitor or press Ctrl+Shift+M together to bring up the serial monitor. This allows you to see the sketch output.
 
 ![Screenshot](screenshots/bf008.png)
 
-
+Below is an example of what you would expect to see from a successful installation.
 
 ![Screenshot](screenshots/bf009.png)
