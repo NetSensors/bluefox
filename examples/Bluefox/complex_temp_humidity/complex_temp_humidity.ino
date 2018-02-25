@@ -19,7 +19,7 @@
 
 #define OFFSET_MAX 4
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  60       /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP  300       /* Time ESP32 will go to sleep (in seconds) */
 
 //create an instance of the Sigfox library/class
 Sigfox sigfox;
