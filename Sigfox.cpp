@@ -15,6 +15,7 @@
 #define  SIGFOX_TX_PIN 26
 #define  SIGFOX_RX_PIN 25
 #define  SIGFOX_RESET_PIN 5
+#define  LED_PIN 0
 
 HardwareSerial SigfoxSerial(1);
 
@@ -32,9 +33,8 @@ SHT3x Sensor( 0x44,         //Set the address
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
 
-const float measured = 3.54; 
-const float reported = 3.48;
-
+const float measured = 3.45; 
+const float reported = 2.99;
 
 //boolean _newData = false;
 
@@ -42,7 +42,8 @@ Sigfox::Sigfox(){
 	
   
   pinMode(SIGFOX_RESET_PIN, OUTPUT);
-  analogSetPinAttenuation(A6, ADC_0db);
+  pinMode(LED_PIN,INPUT_PULLDOWN);
+  analogSetPinAttenuation(BATTERY_MONITOR_PIN, ADC_11db);
   digitalWrite(SIGFOX_RESET_PIN, HIGH); 
 
 
@@ -52,7 +53,6 @@ void Sigfox::begin(){
 		
 	Sensor.SetUpdateInterval(1000);	
 	Sensor.Begin();
-	
 	resetModem();
 	SigfoxSerial.begin(9600, SERIAL_8N1, SIGFOX_RX_PIN, SIGFOX_TX_PIN);
 	// May be a better idea starting with the sigfox modem asleep to conserve power
@@ -348,14 +348,11 @@ float Sigfox::getRelHumidity(){
 }
 
 float Sigfox::getBatteryVoltage() {
-
-  int aValue = analogRead(BATTERY_MONITOR_PIN);
-  float ref = ((1.1/4095.0000)*(aValue));
-  float correction = measured/reported;
-  ref = ref*correction;
-  float ratio = ((1000.00f+330.00f)/330.00f);
-  float bVoltage = ref*ratio;
-  return bVoltage;
+	
+	int aValue = analogRead(BATTERY_MONITOR_PIN);
+	float correction = measured/reported;
+	float bVoltage = ((3.3/4095.00)*aValue)*2*correction;
+	return bVoltage;
 
 }
 
