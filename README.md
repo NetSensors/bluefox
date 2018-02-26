@@ -2,6 +2,8 @@
 
 - Install Arduino ESP32 support on Windows, instructions here https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/windows.md
 
+![Screenshot](screenshots/bluefox.jpg)
+
 Next we Install the bluefox libraries, setup the development enviornment and load our first sketch.
 
 1. Navigate to https://github.com/NetSensors/bluefox 
