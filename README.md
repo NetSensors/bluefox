@@ -1,6 +1,6 @@
 # bluefox
 
-Below are the instructions on how to get your buefox development kit up and running with the provided examples in the bluefox arduino library. It covers three main steps.
+Below are the instructions on how to get your buefox development kit up and running with the provided examples in the bluefox arduino library. It covers four main steps.
 
 - Installation of the Arduino IDE
 - Installation of the ESP32 board support packages
