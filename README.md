@@ -1,5 +1,15 @@
 # bluefox
 
+Below are the instructions on how to get your buefox development kit up and running with the provided examples in the bluefox arduino library. It covers three main steps.
+
+- Installation of the Arduino IDE
+- Installation of the ESP32 board support packages
+- Installation of the bluefox library and examples
+- Loading and running the simple message sketch
+
+Any problems you may experience with these instructions please raise an issue using the issues tab above.
+
+
 - Install Arduino ESP32 support on Windows, instructions here https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/windows.md
 
 ![Screenshot](screenshots/bluefox.jpg)
