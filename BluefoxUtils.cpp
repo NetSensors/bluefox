@@ -10,8 +10,9 @@
 
 #include "Arduino.h"
 #include "BluefoxUtils.h"
-
+#include "WiFi.h"
 #define LED_BUILTIN 0
+
 
 BluefoxUtils::BluefoxUtils(){
 		
@@ -82,5 +83,94 @@ void BluefoxUtils::flash(long flashOnMillis, long flashOffMillis, int repeat){
 
  
  
+}
+
+void BluefoxUtils::getScanResults(struct scanResult* results, int maxResults) {
+
+  // Set WiFi to station mode and disconnect from an AP if it was previously connected
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  wait(100);
+
+  // WiFi.scanNetworks will return the number of networks found
+  int n = WiFi.scanNetworks(false,false);
+  
+    //utils.printDebugValue((String)n + " networks found");
+
+  if (n >= maxResults){
+    
+    n = maxResults - 1;
+    
+    //utils.printDebug("More than max basesations found"); 
+    //utils.printDebug("Using max value",(String)maxResults); 
+  
+  } 
+  
+  int o = n;
+  int loops = 0;
+
+                // sort by RSSI
+                int indices[n];
+                int skip[n];
+                
+                String ssid;
+                
+                for (int i = 0; i < n; i++) {
+                  indices[i] = i;
+                }
+            
+                // CONFIG
+                bool sortRSSI   = true; // sort aps by RSSI
+                bool removeDups = true; // remove dup aps ( forces sort )
+                bool printAPs   = true; // print found aps
+
+                // --------
+                if(removeDups || sortRSSI){
+                  for (int i = 0; i < n; i++) {
+                    for (int j = i + 1; j < n; j++) {
+                      if (WiFi.RSSI(indices[j]) > WiFi.RSSI(indices[i])) {
+                        loops++;
+                        //int temp = indices[j];
+                        //indices[j] = indices[i];
+                        //indices[i] = temp;
+                        std::swap(indices[i], indices[j]);  
+                        std::swap(skip[i], skip[j]);  
+                      }
+                    }
+                  }
+                }
+
+                if(removeDups){
+                  for (int i = 0; i < n; i++) {
+                    if(indices[i] == -1){
+                      --o;
+                      continue;
+                    }
+                    ssid = WiFi.SSID(indices[i]);
+                    for (int j = i + 1; j < n; j++) {
+                      loops++;
+                      if (ssid == WiFi.SSID(indices[j])) {
+                        indices[j] = -1;
+                      }
+                    }
+                  }
+                }
+
+                //utils.printDebug("Networks no duplicates",(String)o); 
+
+                for (int i = 0; i < maxResults; ++i) results[i].index = -1; //clear array ready for new data
+                for (int i = 0; i < n; ++i)
+                {
+                
+                 if (indices[i] != -1){
+                    
+                    results[i].rssi = (String)WiFi.RSSI(indices[i]);
+                    results[i].bssid = (String)WiFi.BSSIDstr(indices[i]);
+                    results[i].ssid = (String)WiFi.SSID(indices[i]);
+                    results[i].index = indices[i];
+                    
+                  }
+                }
+
 }
 

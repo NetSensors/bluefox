@@ -10,6 +10,7 @@
 #include "Arduino.h"
 #include "Sigfox.h"
 #include "SHT3x.h"
+#include "WiFi.h"
 
 #define  BATTERY_MONITOR_PIN A6
 #define  SIGFOX_TX_PIN 26
@@ -19,16 +20,12 @@
 
 HardwareSerial SigfoxSerial(1);
 
-
 SHT3x Sensor( 0x44,         //Set the address
                 SHT3x::Zero,  //Functions will return zeros in case of error
                 255,          //If you DID NOT connected RESET pin
                 SHT3x::SHT30, //Sensor type
                 SHT3x::Single_HighRep_ClockStretch //Low repetability mode
                 );
-
-
-
 
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
@@ -50,7 +47,9 @@ Sigfox::Sigfox(){
 }
 
 void Sigfox::begin(){
-		
+	
+	
+	WiFi.mode( WIFI_OFF ); // Make sure the WiFi is turned off to save power
 	Sensor.SetUpdateInterval(1000);	
 	Sensor.Begin();
 	resetModem();

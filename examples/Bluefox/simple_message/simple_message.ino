@@ -17,10 +17,12 @@
 //create an instance of the Sigfox library/class
 Sigfox sigfox;
 
+
 void setup() {
 
   pinMode(0,OUTPUT);
   digitalWrite(0,HIGH);
+  //utils.flash(100,100,20);
 
   // configure the esp 32
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector

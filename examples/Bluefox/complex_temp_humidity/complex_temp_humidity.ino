@@ -34,7 +34,6 @@ void setup() {
 
     pinMode(0,OUTPUT);
     
-
     // configure the esp 32
     WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);

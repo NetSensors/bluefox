@@ -41,8 +41,10 @@ void setup() {
   else{
     Serial.print("Reset     : ");Serial.println("fail");
   }  
+
   
-  // gets the pac code a function parameter can be used to set the timeout in number of milliseconds
+  
+    // gets the pac code a function parameter can be used to set the timeout in number of milliseconds
   // return type is String containing pac code or "timeout" if pac code cannot be retrieved.
   Serial.print("PAC code  : ");Serial.println(sigfox.getPacCode());
 
@@ -57,7 +59,20 @@ void setup() {
   
   // Sends the hex string then waits for downlink response either prints response or error message
   // usually a timeout if no response recieved
-  Serial.print("Result    : ");Serial.println(sigfox.downlinkHexString(hexString));
+  //Serial.print("Result    : ");Serial.println(sigfox.downlinkHexString(hexString));
+
+  String strResult = sigfox.downlinkHexString(hexString);
+  Serial.print("Result    : ");Serial.println(strResult);
+
+  char hex1[3]; 
+  char hex2[3]; 
+  strResult.substring(21,23).toCharArray(hex1, 3);
+  strResult.substring(24,26).toCharArray(hex2, 3);
+  int x  = x2i(hex1) << 8;
+  x =  x | x2i(hex2);
+  word result = 0xFFFF0000 | x;
+  float s = 0-(float)(~(result - 1)); // easy becaus we know its always 0
+  Serial.print("Result ");Serial.println(s);
 
   sigfox.sleep(100);
   // goes to sleep to save battery life, will tx once a day or when reset button pressed 
@@ -68,3 +83,23 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 }
+
+int x2i(char *s) 
+{
+ int x = 0;
+ for(;;) {
+   char c = *s;
+   if (c >= '0' && c <= '9') {
+      x *= 16;
+      x += c - '0'; 
+   }
+   else if (c >= 'A' && c <= 'F') {
+      x *= 16;
+      x += (c - 'A') + 10; 
+   }
+   else break;
+   s++;
+ }
+ return x;
+}
+

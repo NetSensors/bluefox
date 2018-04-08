@@ -7,10 +7,20 @@
   
 */
 
+struct scanResult
+{
+  String bssid;
+  String rssi;
+  String ssid;
+  int index;
+};
+
+
 
 #ifndef BluefoxUtils_h
 #define BluefoxUtils_h
 #include "Arduino.h"
+
 
 class BluefoxUtils
 {
@@ -22,6 +32,8 @@ class BluefoxUtils
 	void printDebug(String key,String val);
 	void printDebugValue(String val);
 	void flash(long flashOnMillis, long flashOffMillis, int repeat);
+	void getScanResults(struct scanResult* results, int maxResults);
+
 	
   private:
    		

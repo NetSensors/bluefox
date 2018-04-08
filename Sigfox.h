@@ -11,6 +11,8 @@
 #define Sigfox_h
 #include "Arduino.h"
 
+
+
 class Sigfox
 {
   public:
